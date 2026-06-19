@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, register } from "../services/authService";
+import { login as loginApi, register } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState("admin"); // Default to admin for setup
+  const [role, setRole] = useState("staff");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,10 +33,8 @@ function Login() {
         setIsRegistering(false);
         setPassword("");
       } else {
-        const data = await login(email, password);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("name", data.name);
+        const data = await loginApi(email, password);
+        login(data.token, data.role, data.name);
         toast.success("Login Successful!");
         navigate("/dashboard");
       }
@@ -91,7 +91,7 @@ function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. admin@smartretail.com"
+              placeholder="e.g. admin@vyaparione.com"
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-600 text-sm transition-all placeholder:text-slate-400 bg-slate-50/50"
             />
           </div>

@@ -4,6 +4,7 @@ import MainLayout from "../layouts/MainLayout";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { getSales, recordSale } from "../services/saleService";
 import { getProducts } from "../services/productService";
+import { useAuth } from "../context/AuthContext";
 
 function Sales() {
   const [sales, setSales] = useState([]);
@@ -22,7 +23,7 @@ function Sales() {
   const itemsPerPage = 10;
 
   // Role check
-  const isAdmin = localStorage.getItem("role") === "admin";
+  const { isAdmin } = useAuth();
 
   const fetchData = async () => {
     try {

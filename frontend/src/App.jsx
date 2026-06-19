@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Sales from './pages/Sales'
+import DemandIntelligence from './pages/DemandIntelligence'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -50,10 +51,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/forecast"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <DemandIntelligence />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )
 }
 
-export default App
+export default App;

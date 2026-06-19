@@ -9,6 +9,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../services/productService";
+import { useAuth } from "../context/AuthContext";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -45,7 +46,7 @@ function Products() {
   const [errors, setErrors] = useState({});
 
   // User Role Check
-  const isAdmin = localStorage.getItem("role") === "admin";
+  const { isAdmin } = useAuth();
 
   const fetchProductsList = async () => {
     try {

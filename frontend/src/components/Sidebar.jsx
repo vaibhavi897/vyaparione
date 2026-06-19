@@ -1,12 +1,22 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Sidebar() {
+  const { logout, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
   const navItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Products", path: "/products" },
     { name: "Sales", path: "/sales" },
+    ...(isAdmin ? [{ name: "Demand Intelligence", path: "/forecast" }] : []),
     { name: "Logout", path: "/login" }
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <aside className="fixed top-0 left-0 h-screen w-[250px] bg-slate-900 text-slate-100 flex flex-col border-r border-slate-800 z-30">
@@ -21,26 +31,34 @@ function Sidebar() {
       {/* Navigation Items */}
       <nav className="flex-1 py-6 px-4 space-y-1.5">
         {navItems.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.path}
-            onClick={() => {
-              if (item.name === "Logout") {
-                localStorage.removeItem("token");
-                localStorage.removeItem("role");
-                localStorage.removeItem("name");
+          item.name === "Logout" ? (
+            <button
+              key={item.name}
+              onClick={handleLogout}
+              className="w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:bg-slate-800/60 hover:text-slate-100"
+            >
+              {item.name}
+            </button>
+          ) : (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? "bg-violet-600 text-white shadow-lg shadow-violet-600/25"
+                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100"
+                }`
               }
-            }}
-            className={({ isActive }) =>
-              `flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActive && item.name !== "Logout"
-                  ? "bg-violet-600 text-white shadow-lg shadow-violet-600/25"
-                  : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100"
-              }`
-            }
-          >
-            {item.name}
-          </NavLink>
+            >
+              {item.name}
+              {item.name === "Demand Intelligence" && (
+                <span className="ml-auto px-1.5 py-0.5 text-[9px] font-bold uppercase bg-violet-500/20 text-violet-300 rounded border border-violet-500/30">
+                  AI
+                </span>
+              )}
+            </NavLink>
+          )
         ))}
       </nav>
 

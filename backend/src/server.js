@@ -5,6 +5,7 @@ const authRoutes =require("./routes/authRoutes");
 const productRoutes =require("./routes/productRoutes");
 const saleRoutes =require("./routes/saleRoutes");
 const dashboardRoutes =require("./routes/dashboardRoutes");
+const forecastRoutes = require("./routes/forecastRoutes");
 
 const app = express();
 
@@ -14,9 +15,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/forecast", forecastRoutes);
 
 app.get("/", (req, res) => {
-    res.send("Smart Retail Backend Running");
+    res.send("VyapariOne Backend Running");
 });
 
 const PORT = 5000;
